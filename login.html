@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySmarter - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+        }
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        select {
+            background-color: white;
+        }
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-button:hover {
+            background-color: #2980b9;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>StudySmarter</h1>
+        <form id="loginForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="university">Select University:</label>
+                <select id="university" name="university" required>
+                    <option value="">-- Select University --</option>
+                    <option value="goldsmiths">Goldsmiths, University of London</option>
+                    <option value="ucl">University College London</option>
+                    <option value="kings">King's College London</option>
+                    <option value="qmul">Queen Mary University of London</option>
+                    <option value="imperial">Imperial College London</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">University Email:</label>
+                <input type="email" id="email" name="email" required placeholder="yourname@university.ac.uk">
+                <div id="emailError" class="error-message">Please enter a valid university email</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <div id="passwordError" class="error-message">Password must be at least 8 characters</div>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            
+            const university = document.getElementById('university').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Reset error messages
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            
+            let isValid = true;
+            
+            // Validate university email format
+            if (!email.endsWith('.ac.uk')) {
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password length
+            if (password.length < 8) {
+                passwordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Here you would normally send the data to a server
+                // For demo purposes, we'll just log it
+                console.log('Login attempt:', {
+                    university,
+                    email,
+                    password: '********'
+                });
+                
+                // Redirect to main app (demo purposes)
+                alert('Login successful! Redirecting to dashboard...');
+                // window.location.href = 'dashboard.html';
+            }
+            
+            return false;
+        }
+    </script>
+</body>
+</html>

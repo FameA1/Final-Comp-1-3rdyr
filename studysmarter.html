@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySmarter Prototype</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .output {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .milestone {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #f8f9fa;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>StudySmarter Prototype</h1>
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        // Sample student data
+        const student = {
+            name: "Alex Smith",
+            id: "st12345",
+            course: "Computer Science",
+            year: 2
+        };
+
+        // Sample assignment
+        const assignment = {
+            name: "Database Project",
+            dueDate: "2024-05-15",
+            complexity: "medium",
+            markingCriteria: [
+                "Database design",
+                "Implementation",
+                "Testing",
+                "Documentation",
+                "Presentation"
+            ]
+        };
+
+        // Calculate start date based on complexity
+        function calculateStartDate(dueDate, complexity) {
+            const due = new Date(dueDate);
+            const timeNeeded = {
+                'simple': 7,    // 1 week
+                'medium': 14,   // 2 weeks
+                'complex': 21   // 3 weeks
+            };
+            
+            const startDate = new Date(due);
+            startDate.setDate(due.getDate() - timeNeeded[complexity]);
+            return startDate;
+        }
+
+        // Create timeline
+        function createTimeline(assignment) {
+            let output = "";
+            const startDate = calculateStartDate(assignment.dueDate, assignment.complexity);
+            const dueDate = new Date(assignment.dueDate);
+            
+            output += "<div class='section'>";
+            output += "<h2>Assignment Timeline</h2>";
+            output += `<p><strong>Assignment:</strong> ${assignment.name}</p>`;
+            output += `<p><strong>Start Date:</strong> ${startDate.toDateString()}</p>`;
+            output += `<p><strong>Due Date:</strong> ${dueDate.toDateString()}</p>`;
+            
+            // Create milestones
+            const totalDays = Math.round((dueDate - startDate) / (1000 * 60 * 60 * 24));
+            const milestones = [
+                { task: "Start project" },
+                { task: "Complete initial design" },
+                { task: "Finish main implementation" },
+                { task: "Complete testing" },
+                { task: "Submit final work" }
+            ];
+
+            output += "<h3>Milestones:</h3>";
+            milestones.forEach((milestone, index) => {
+                const daysToAdd = Math.round((totalDays * index) / (milestones.length - 1));
+                const milestoneDate = new Date(startDate);
+                milestoneDate.setDate(startDate.getDate() + daysToAdd);
+                output += `<div class="milestone">${milestoneDate.toDateString()}: ${milestone.task}</div>`;
+            });
+            output += "</div>";
+            return output;
+        }
+
+        // Break down marking criteria
+        function breakdownMarkingCriteria(criteria) {
+            let output = "<div class='section'>";
+            output += "<h2>Marking Criteria Checklist</h2>";
+            criteria.forEach((criterion, index) => {
+                output += `<p><input type='checkbox' id='criterion${index}'> <label for='criterion${index}'>${criterion}</label></p>`;
+            });
+            output += "</div>";
+            return output;
+        }
+
+        // Display all information
+        window.onload = function() {
+            const outputDiv = document.getElementById('output');
+            let content = "<div class='section'>";
+            content += `<h2>Student Information</h2>`;
+            content += `<p><strong>Student:</strong> ${student.name} (${student.id})</p>`;
+            content += `<p><strong>Course:</strong> ${student.course}, Year ${student.year}</p>`;
+            content += "</div>";
+            
+            content += createTimeline(assignment);
+            content += breakdownMarkingCriteria(assignment.markingCriteria);
+            
+            outputDiv.innerHTML = content;
+        };
+    </script>
+</body>
+</html>
